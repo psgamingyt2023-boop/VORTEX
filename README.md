@@ -1,9 +1,15 @@
 # VORTEX AI
 
-Premium multi-provider coding workspace. Source bundle: `vortex-ai-source.tar.gz.b64`.
+Premium multi-provider coding workspace.
 
-The Vercel project uses an install hook to unpack the committed source bundle before installing dependencies and building. Push a new bundle to trigger the connected Vercel deployment.
+## Repository bootstrap status
 
-For local setup, decode the source bundle and extract it with `tar -xzf vortex-ai-source.tar.gz`, then run `npm install` and `npm run dev`.
+The upgraded VORTEX source bundle has been prepared separately, but its application files are not yet committed to this repository. Do not treat the current Vercel deployment as live or production-ready until the source files are added and a build succeeds.
 
-See the full setup and architecture documentation in the extracted project README.
+## Source bundle
+
+The prepared source archive contains the Next.js application, Monaco editor UI, parameterized motion system, multi-agent orchestration, provider directory endpoint, and setup documentation. Add the extracted project files to the repository root to trigger the linked Vercel deployment.
+
+## Security
+
+Never commit API keys. Configure provider credentials only as server-side Vercel environment variables.
