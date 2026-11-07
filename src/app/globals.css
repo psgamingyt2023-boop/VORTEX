@@ -483,3 +483,10 @@ html,body{background:#080f0d;color:#eef8f2}
   .landing-nav{background:rgba(7,16,11,.9);backdrop-filter:blur(10px)}
   .landing-prompt{box-shadow:0 16px 46px rgba(0,0,0,.42),0 0 26px rgba(37,190,119,.1)}
 }
+
+
+/* Landing setup controls */
+.landing-connect{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(83,213,148,.34);background:rgba(20,76,49,.38);color:#a9edc5;border-radius:7px;padding:7px 10px;font-size:10px;font-weight:600;transition:background .2s,border-color .2s}
+.landing-connect:hover{background:rgba(27,112,70,.55);border-color:rgba(103,235,164,.62)}
+.setup-note{font-size:10px!important;color:#8cb99c!important;margin:-19px 0 20px!important}
+@media(max-width:760px){.landing-connect{padding:6px 8px}.landing-nav-right{gap:9px}.landing-status{font-size:8px}}
