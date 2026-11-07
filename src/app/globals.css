@@ -245,3 +245,126 @@
 }
 
 @media(min-width:821px){.workspace.sidebar-hidden .sidebar{display:none}}
+
+
+/* VORTEX // AETHER GLASS — performance-first visual system */
+:root{
+  --vg-line:rgba(190,176,255,.18);
+  --vg-edge:rgba(202,190,255,.28);
+  --vg-violet:rgba(139,112,255,.16);
+  --vg-cyan:rgba(93,213,231,.10);
+  --vg-surface:rgba(18,19,31,.70);
+  --vg-ease:cubic-bezier(.2,.75,.25,1)
+}
+/* Rich glass comes from layered translucency and edge lighting, not heavy full-screen blur. */
+.workspace-mode .topbar{
+  background:linear-gradient(110deg,rgba(15,14,26,.86),rgba(9,13,22,.78));
+  -webkit-backdrop-filter:blur(14px) saturate(145%);
+  backdrop-filter:blur(14px) saturate(145%);
+  border-bottom:1px solid rgba(188,174,255,.16);
+  box-shadow:0 1px 0 rgba(255,255,255,.035),0 12px 34px rgba(0,0,0,.24)
+}
+.workspace-mode .sidebar{
+  background:linear-gradient(155deg,rgba(24,21,39,.94),rgba(10,13,22,.94) 68%,rgba(11,20,29,.94));
+  border-right:1px solid var(--vg-line);
+  box-shadow:14px 0 46px rgba(0,0,0,.28),inset -1px 0 rgba(255,255,255,.035)
+}
+.workspace-mode .prompt-card,.workspace-mode .result-card,.workspace-mode .response-card,
+.workspace-mode .plan-card,.workspace-mode .agent-card,.workspace-mode .mode-chip{
+  position:relative;isolation:isolate;
+  background:linear-gradient(145deg,rgba(30,27,49,.76),rgba(14,18,29,.78) 58%,rgba(13,24,32,.72));
+  border:1px solid rgba(177,160,255,.23);
+  box-shadow:0 18px 54px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.10),inset 0 -1px 0 rgba(128,111,197,.07)
+}
+.workspace-mode .prompt-card{
+  background:linear-gradient(145deg,rgba(36,30,60,.88),rgba(17,22,36,.91) 58%,rgba(13,29,38,.88));
+  border-color:rgba(190,174,255,.42);
+  box-shadow:0 24px 64px rgba(0,0,0,.38),0 0 0 1px rgba(184,166,255,.06),inset 0 1px 0 rgba(255,255,255,.17)
+}
+.workspace-mode .prompt-card:before,.workspace-mode .result-card:after,.workspace-mode .response-card:after,
+.workspace-mode .agent-card:before,.workspace-mode .plan-card:after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
+  background:linear-gradient(125deg,rgba(255,255,255,.065),transparent 24%,transparent 70%,rgba(100,212,230,.035))
+}
+.workspace-mode .result-card,.workspace-mode .response-card{overflow:hidden}
+.workspace-mode .result-card:before,.workspace-mode .response-card:before{
+  height:1px;background:linear-gradient(90deg,transparent,rgba(191,174,255,.72),rgba(105,219,230,.52),transparent);
+  opacity:.62;animation:none
+}
+.workspace-mode .prompt-head,.workspace-mode .response-title{border-color:rgba(190,176,255,.13)}
+.workspace-mode .editor-area{background:rgba(5,8,14,.54)}
+.workspace-mode .nav-item.active{background:linear-gradient(100deg,rgba(127,99,218,.22),rgba(60,53,91,.16));border-color:rgba(184,165,255,.27)}
+.workspace-mode .new-project,.workspace-mode .history-item,.workspace-mode .nav-item{
+  transition:background-color .22s var(--vg-ease),border-color .22s var(--vg-ease),color .22s var(--vg-ease),transform .22s var(--vg-ease)
+}
+.workspace-mode .brand-mark{box-shadow:0 0 0 1px rgba(194,178,255,.2),0 5px 18px rgba(120,93,235,.2),inset 0 1px rgba(255,255,255,.32)}
+.workspace-mode .brand-mark:after{animation:none;opacity:.55;transform:translateX(0) rotate(18deg);background:linear-gradient(110deg,transparent 42%,rgba(255,255,255,.42) 50%,transparent 58%)}
+.workspace-mode .send-button:not(:disabled){
+  background:linear-gradient(112deg,#9279f1 0%,#777ee8 52%,#62b9d5 100%);
+  background-size:100% 100%;animation:none;
+  box-shadow:0 7px 24px rgba(115,91,225,.28),inset 0 1px rgba(255,255,255,.3);
+  transition:transform .2s var(--vg-ease),filter .2s var(--vg-ease),box-shadow .2s var(--vg-ease)
+}
+.workspace-mode .prompt-card:after{animation:none;opacity:0}
+.workspace-mode .mode-chip:after{animation:none;opacity:.35;left:40%}
+.workspace-mode .nav-item.active:after{animation:none;opacity:.8}
+.workspace-mode .pulse-dot:not(.muted),.workspace-mode .agent-indicator{animation:signal-breathe 3.2s ease-in-out infinite}
+@keyframes signal-breathe{0%,100%{opacity:.78}50%{opacity:1}}
+/* Continuous motion is restricted to compositor-friendly transform/opacity. */
+.app-shell.workspace-mode:after{
+  width:460px;height:460px;right:-190px;top:100px;filter:blur(44px);opacity:.55;
+  animation:ambient-drift 28s ease-in-out infinite alternate
+}
+@keyframes ambient-drift{from{transform:translate3d(0,0,0) rotate(0) scale(.96);opacity:.38}to{transform:translate3d(-34px,24px,0) rotate(22deg) scale(1.06);opacity:.62}}
+.app-shell.workspace-mode:before{animation:none}
+.app-shell.workspace-mode .main-panel:before{filter:none;animation:ambient-drift 24s ease-in-out infinite alternate}
+.workspace-mode .welcome-row,.workspace-mode .result-heading,.workspace-mode .result-card,.workspace-mode .response-card{
+  animation:content-arrive .65s var(--vg-ease) both;filter:none
+}
+.workspace-mode .result-heading{animation-delay:.06s}
+.workspace-mode .result-card{animation-delay:.12s}
+.workspace-mode .response-card{animation-delay:.18s}
+@keyframes content-arrive{from{opacity:0;transform:translate3d(0,13px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+.workspace-mode .prompt-card{animation:dock-arrive .65s var(--vg-ease) both;filter:none}
+@keyframes dock-arrive{from{opacity:0;transform:translate3d(0,18px,0) scale(.985)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
+/* Landing hero: slow, restrained orbital motion; no animated blur or layout properties. */
+.hero-orbit .orbit-ring-a{animation:orbit-float-a 24s linear infinite}
+.hero-orbit .orbit-ring-b{animation:orbit-float-b 19s linear infinite}
+@keyframes orbit-float-a{to{transform:rotate(360deg) scaleY(.48)}}
+@keyframes orbit-float-b{to{transform:rotate(-360deg) scaleY(.55)}}
+.hero-core{animation:core-glow 5.5s ease-in-out infinite}
+@keyframes core-glow{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
+.orbit-spark{animation:spark-opacity 3.8s ease-in-out infinite}
+@keyframes spark-opacity{0%,100%{opacity:.45}50%{opacity:1}}
+.landing-prompt:after{animation:none;opacity:.6;background:linear-gradient(115deg,transparent 15%,rgba(180,160,255,.55) 43%,rgba(121,220,233,.4) 55%,transparent 78%)}
+.landing-center>.hero-eyebrow,.landing-center>h1,.landing-center>.hero-copy,.landing-center>.landing-prompt-wrap,.landing-center>.idea-row{animation:landing-arrive .7s var(--vg-ease) both;filter:none}
+@keyframes landing-arrive{from{opacity:0;transform:translate3d(0,15px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+/* Mobile glass drawer: solid-enough tint for legibility; keep backdrop blur local and modest. */
+@media(max-width:820px){
+  .workspace-mode .sidebar{-webkit-backdrop-filter:blur(12px) saturate(125%);backdrop-filter:blur(12px) saturate(125%)}
+  .sidebar-backdrop{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(3,4,10,.76)}
+  .workspace-mode .prompt-card{background:linear-gradient(145deg,rgba(31,26,52,.97),rgba(12,18,29,.97));box-shadow:0 18px 44px rgba(0,0,0,.48),inset 0 1px rgba(255,255,255,.15)}
+  .workspace-mode .main-panel{padding-bottom:calc(235px + env(safe-area-inset-bottom))}
+  .workspace-mode .editor-area{contain:layout paint}
+}
+@media(hover:hover) and (pointer:fine){
+  .workspace-mode .result-card,.workspace-mode .response-card,.workspace-mode .agent-card,.workspace-mode .plan-card{
+    transition:transform .24s var(--vg-ease),border-color .24s var(--vg-ease),box-shadow .24s var(--vg-ease)
+  }
+  .workspace-mode .result-card:hover,.workspace-mode .response-card:hover{transform:translate3d(0,-2px,0);border-color:rgba(188,170,255,.42)}
+  .workspace-mode .agent-card:hover{transform:translate3d(0,-3px,0);border-color:rgba(188,170,255,.48)}
+  .workspace-mode .send-button:not(:disabled):hover{transform:translate3d(0,-2px,0);filter:brightness(1.08)}
+}
+@media(prefers-reduced-motion:reduce){
+  .app-shell.workspace-mode:after,.app-shell.workspace-mode .main-panel:before,
+  .workspace-mode .pulse-dot:not(.muted),.workspace-mode .agent-indicator,
+  .hero-orbit .orbit-ring-a,.hero-orbit .orbit-ring-b,.hero-core,.orbit-spark,
+  .landing-center>.hero-eyebrow,.landing-center>h1,.landing-center>.hero-copy,
+  .landing-center>.landing-prompt-wrap,.landing-center>.idea-row{animation:none!important}
+  *,*:before,*:after{scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
+@media(max-width:520px){
+  .workspace-mode .topbar{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(10,11,18,.96)}
+  .workspace-mode .sidebar{-webkit-backdrop-filter:none;backdrop-filter:none}
+  .workspace-mode .result-card,.workspace-mode .response-card,.workspace-mode .prompt-card{box-shadow:0 12px 34px rgba(0,0,0,.3),inset 0 1px rgba(255,255,255,.09)}
+}
