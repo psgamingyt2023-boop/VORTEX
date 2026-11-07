@@ -29,6 +29,7 @@ export default function Home() {
   const [history, setHistory] = useState<string[]>(["New workspace"]);
   const [sidebar, setSidebar] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [phase, setPhase] = useState<"home" | "launching" | "workspace">("home");
 
   useEffect(() => { fetch("/api/status").then(r => r.json()).then(setStatus).catch(() => setStatus(null)); }, []);
   const preview = useMemo(() => {
@@ -36,23 +37,59 @@ export default function Home() {
     return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script src="https://unpkg.com/@babel/standalone/babel.min.js"><\\/script><style>*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui;background:#0b0d13;color:#f6f5fb}.demo-app{min-height:100vh;padding:48px;display:grid;align-content:center;justify-items:center;text-align:center}.demo-orb{width:90px;height:90px;border-radius:30px;background:linear-gradient(135deg,#a58cff,#63d5df);filter:blur(1px);box-shadow:0 0 80px #9875ff55;margin-bottom:28px;animation:float 5s ease-in-out infinite}@keyframes float{50%{transform:translateY(-12px) rotate(7deg)}}.demo-kicker{font-size:10px;letter-spacing:.2em;color:#b4a3ff}.demo-app h1{font-size:clamp(30px,6vw,56px);letter-spacing:-.05em;margin:16px 0}.demo-app p{color:#9298aa}</style></head><body><div id="root"></div><script src="https://unpkg.com/react@18/umd/react.development.js"><\\/script><script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"><\\/script><script type="text/babel">${escaped.replace(/export default function App/, "function App").replace(/export default App;?/, "")}\nReactDOM.createRoot(document.getElementById('root')).render(<App/>);<\\/script></body></html>`;
   }, [code]);
 
-  async function submit() {
-    if (!prompt.trim() || busy) return;
+  async function submit(requestPrompt = prompt) {
+    if (!requestPrompt.trim() || busy) return;
     setBusy(true); setResult(null);
     try {
-      const response = await fetch("/api/chat", { method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify({prompt}) });
+      const response = await fetch("/api/chat", { method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify({prompt:requestPrompt}) });
       const data: Result = await response.json();
       if (!response.ok) throw new Error(data.error || "The request failed.");
       setResult(data); if (data.code) setCode(data.code);
-      setHistory(old => [prompt.slice(0,42), ...old].slice(0,8)); setPrompt("");
+      setHistory(old => [requestPrompt.slice(0,42), ...old].slice(0,8)); setPrompt("");
     } catch (e) { setResult({error:e instanceof Error ? e.message : "Something went wrong."}); }
     finally { setBusy(false); }
   }
+  function launchProject() {
+    const requestPrompt = prompt.trim();
+    if (!requestPrompt || busy || phase !== "home") return;
+    setPhase("launching");
+    window.setTimeout(() => {
+      setPhase("workspace");
+      void submit(requestPrompt);
+    }, 1120);
+  }
+
   async function copyCode() {
     await navigator.clipboard.writeText(code); setCopied(true); setTimeout(() => setCopied(false), 1500);
   }
 
-  return <main className="app-shell">
+  if (phase !== "workspace") return <main className={`landing-screen ${phase === "launching" ? "is-launching" : ""}`}>
+    <div className="landing-grid" />
+    <div className="ambient ambient-one" /><div className="ambient ambient-two" />
+    <header className="landing-nav">
+      <div className="brand"><div className="brand-mark"><Layers3 size={18}/></div><span>VORTEX <b>AI</b></span><span className="brand-tag">UNIFIED CODING INTELLIGENCE</span></div>
+      <div className="landing-nav-right"><span className="landing-status"><i/> YOUR CREATIVE ENGINE</span><span className="landing-version">V 1.0</span></div>
+    </header>
+    <section className="landing-center">
+      <div className="hero-orbit"><div className="orbit-ring orbit-ring-a"/><div className="orbit-ring orbit-ring-b"/><div className="hero-core"><Layers3 size={30}/></div><span className="orbit-spark spark-a"/><span className="orbit-spark spark-b"/></div>
+      <div className="hero-eyebrow"><span/> INTELLIGENCE IN MOTION <span/></div>
+      <h1>Ideas in.<br/><em>Extraordinary</em> out.</h1>
+      <p className="hero-copy">Your AI engineering workspace. Describe what you imagine.<br/>VORTEX plans, builds, reviews, and brings it to life.</p>
+      <div className="landing-prompt-wrap">
+        <div className="landing-prompt">
+          <div className="landing-prompt-label"><Sparkles size={13}/> START WITH AN IDEA <span>⌘ ↵</span></div>
+          <textarea value={prompt} onChange={e=>setPrompt(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();launchProject()}}} placeholder="Build me a beautiful portfolio with fluid animations..." aria-label="Describe what you want to build"/>
+          <div className="landing-prompt-bottom"><div className="landing-prompt-hints"><span><ShieldCheck size={12}/> Review-first workflow</span><span><Cpu size={12}/> Multi-stage reasoning</span></div><button className="launch-button" onClick={launchProject} disabled={!prompt.trim()}><span>Start building</span><ArrowUpRight size={15}/></button></div>
+        </div>
+        <div className="prompt-glow"/>
+      </div>
+      <div className="idea-row"><span>OR TRY</span>{["A futuristic SaaS dashboard","A 3D product landing page","A full-stack task manager"].map(x=><button key={x} onClick={()=>setPrompt(x)}>{x}<ArrowUpRight size={10}/></button>)}</div>
+    </section>
+    <footer className="landing-footer"><span>DESIGNED FOR THE CURIOUS.</span><span>POWERED BY YOUR IDEAS <i>✦</i></span><span>VORTEX AI © 2026</span></footer>
+    {phase === "launching" && <><div className="launch-flash"/><div className="launch-token"><div className="brand-mark"><Layers3 size={22}/></div><span>VORTEX</span></div><div className="launch-caption">INITIALIZING YOUR WORKSPACE</div></>}
+  </main>;
+
+  return <main className="app-shell workspace-mode">
     <header className="topbar">
       <button className="icon-button" onClick={() => setSidebar(!sidebar)} aria-label="Toggle sidebar"><PanelLeft size={17}/></button>
       <div className="brand"><div className="brand-mark"><Layers3 size={17}/></div><span>VORTEX <b>AI</b></span><span className="brand-tag">UNIFIED CODING INTELLIGENCE</span></div>
