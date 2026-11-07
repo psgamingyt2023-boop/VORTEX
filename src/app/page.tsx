@@ -27,11 +27,34 @@ export default function Home() {
   const [tab, setTab] = useState<"code" | "preview">("code");
   const [status, setStatus] = useState<{ready:boolean;provider?:string;model?:string}|null>(null);
   const [history, setHistory] = useState<string[]>(["New workspace"]);
-  const [sidebar, setSidebar] = useState(true);
+  const [sidebar, setSidebar] = useState(false);
   const [copied, setCopied] = useState(false);
   const [phase, setPhase] = useState<"home" | "launching" | "workspace">("home");
 
   useEffect(() => { fetch("/api/status").then(r => r.json()).then(setStatus).catch(() => setStatus(null)); }, []);
+
+  // Desktop keeps the navigation pinned open; compact screens start with a closed drawer.
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 820px)");
+    const syncSidebar = () => setSidebar(!media.matches);
+    syncSidebar();
+    media.addEventListener("change", syncSidebar);
+    return () => media.removeEventListener("change", syncSidebar);
+  }, []);
+
+  // Keep the page still while the mobile navigation is open and support the Escape key.
+  useEffect(() => {
+    const compact = window.matchMedia("(max-width: 820px)").matches;
+    document.body.style.overflow = compact && sidebar ? "hidden" : "";
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && compact) setSidebar(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [sidebar]);
   const preview = useMemo(() => {
     const escaped = code.replace(new RegExp("</script", "gi"), "<" + "\\/" + "script");
     return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script src="https://unpkg.com/@babel/standalone/babel.min.js"><\\/script><style>*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui;background:#0b0d13;color:#f6f5fb}.demo-app{min-height:100vh;padding:48px;display:grid;align-content:center;justify-items:center;text-align:center}.demo-orb{width:90px;height:90px;border-radius:30px;background:linear-gradient(135deg,#a58cff,#63d5df);filter:blur(1px);box-shadow:0 0 80px #9875ff55;margin-bottom:28px;animation:float 5s ease-in-out infinite}@keyframes float{50%{transform:translateY(-12px) rotate(7deg)}}.demo-kicker{font-size:10px;letter-spacing:.2em;color:#b4a3ff}.demo-app h1{font-size:clamp(30px,6vw,56px);letter-spacing:-.05em;margin:16px 0}.demo-app p{color:#9298aa}</style></head><body><div id="root"></div><script src="https://unpkg.com/react@18/umd/react.development.js"><\\/script><script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"><\\/script><script type="text/babel">${escaped.replace(/export default function App/, "function App").replace(/export default App;?/, "")}\nReactDOM.createRoot(document.getElementById('root')).render(<App/>);<\\/script></body></html>`;
@@ -56,7 +79,7 @@ export default function Home() {
     window.setTimeout(() => {
       setPhase("workspace");
       void submit(requestPrompt);
-    }, 1120);
+    }, 1450);
   }
 
   async function copyCode() {
@@ -91,12 +114,13 @@ export default function Home() {
 
   return <main className="app-shell workspace-mode">
     <header className="topbar">
-      <button className="icon-button" onClick={() => setSidebar(!sidebar)} aria-label="Toggle sidebar"><PanelLeft size={17}/></button>
+      <button className="icon-button" onClick={() => setSidebar(!sidebar)} aria-label={sidebar ? "Close navigation" : "Open navigation"} aria-expanded={sidebar} aria-controls="vortex-sidebar"><PanelLeft size={17}/></button>
       <div className="brand"><div className="brand-mark"><Layers3 size={17}/></div><span>VORTEX <b>AI</b></span><span className="brand-tag">UNIFIED CODING INTELLIGENCE</span></div>
       <div className="top-actions"><div className="system-pill"><span className={`pulse-dot ${status?.ready ? "" : "muted"}`}/>{status?.ready ? "GEMINI CONNECTED" : "ENGINE SETUP REQUIRED"}</div><button className="setup-button" onClick={() => window.open("https://aistudio.google.com/app/apikey","_blank")}>Connect Gemini <ArrowUpRight size={12}/></button><button className="avatar">V</button></div>
     </header>
     <div className={`workspace ${sidebar ? "sidebar-visible" : "sidebar-hidden"}`}>
-      {sidebar && <aside className="sidebar">
+      {sidebar && <button className="sidebar-backdrop" aria-label="Close navigation" onClick={() => setSidebar(false)} />}
+      {sidebar && <aside id="vortex-sidebar" className="sidebar" aria-label="Workspace navigation">
         <button className="new-project" onClick={() => {setPrompt("");setResult(null);setCode(starter)}}><Plus size={15}/> New workspace <span>⌘ K</span></button>
         <div className="side-label">WORKSPACE</div><div className="nav-item active"><Code2 size={15}/> Coding agent</div><div className="nav-item"><Layers3 size={15}/> Agent orchestration <span className="nav-count">04</span></div><div className="nav-item"><TerminalSquare size={15}/> Code workspace</div>
         <div className="side-label history-label">RECENT SESSIONS</div>{history.map((item,i)=><button className="history-item" key={i} onClick={()=>setPrompt(item)}><FileCode2 size={13}/><span>{item}</span></button>)}
