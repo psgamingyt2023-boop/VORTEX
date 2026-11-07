@@ -83,7 +83,13 @@ export default function Home() {
   }
 
   async function copyCode() {
-    await navigator.clipboard.writeText(code); setCopied(true); setTimeout(() => setCopied(false), 1500);
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1500);
+    } catch {
+      setResult({ error: "Clipboard access was blocked by this browser. Select the code in the editor and copy it manually." });
+    }
   }
 
   if (phase !== "workspace") return <main className={`landing-screen ${phase === "launching" ? "is-launching" : ""}`}>
@@ -91,13 +97,14 @@ export default function Home() {
     <div className="ambient ambient-one" /><div className="ambient ambient-two" />
     <header className="landing-nav">
       <div className="brand"><div className="brand-mark"><Layers3 size={18}/></div><span>VORTEX <b>AI</b></span><span className="brand-tag">UNIFIED CODING INTELLIGENCE</span></div>
-      <div className="landing-nav-right"><span className="landing-status"><i/> YOUR CREATIVE ENGINE</span><span className="landing-version">V 1.0</span></div>
+      <div className="landing-nav-right"><span className="landing-status"><i/> {status?.ready ? "GEMINI CONNECTED" : "WORKSPACE READY · AI SETUP NEEDED"}</span>{!status?.ready && <button className="landing-connect" onClick={() => window.open("https://aistudio.google.com/app/apikey","_blank")}>Connect AI <ArrowUpRight size={11}/></button>}<span className="landing-version">V 1.0</span></div>
     </header>
     <section className="landing-center">
       <div className="hero-orbit"><div className="orbit-ring orbit-ring-a"/><div className="orbit-ring orbit-ring-b"/><div className="hero-core"><Layers3 size={30}/></div><span className="orbit-spark spark-a"/><span className="orbit-spark spark-b"/></div>
       <div className="hero-eyebrow"><span/> INTELLIGENCE IN MOTION <span/></div>
       <h1>Ideas in.<br/><em>Extraordinary</em> out.</h1>
       <p className="hero-copy">Your AI engineering workspace. Describe what you imagine.<br/>VORTEX plans, builds, reviews, and brings it to life.</p>
+      {!status?.ready && <p className="setup-note">The editor and preview work now. Connect a Gemini API key to enable AI generation.</p>}
       <div className="landing-prompt-wrap">
         <div className="landing-prompt">
           <div className="landing-prompt-label"><Sparkles size={13}/> START WITH AN IDEA <span>⌘ ↵</span></div>
