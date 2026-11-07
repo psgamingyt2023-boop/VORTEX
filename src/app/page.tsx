@@ -121,9 +121,9 @@ export default function Home() {
     <div className={`workspace ${sidebar ? "sidebar-visible" : "sidebar-hidden"}`}>
       <button className="sidebar-backdrop" aria-label="Close navigation" tabIndex={sidebar ? 0 : -1} aria-hidden={!sidebar} onClick={() => setSidebar(false)} />
       <aside id="vortex-sidebar" className="sidebar" aria-label="Workspace navigation" aria-hidden={!sidebar}>
-        <button className="new-project" onClick={() => {setPrompt("");setResult(null);setCode(starter)}}><Plus size={15}/> New workspace <span>⌘ K</span></button>
+        <button className="new-project" onClick={() => {setPrompt("");setResult(null);setCode(starter);if(window.matchMedia("(max-width: 820px)").matches)setSidebar(false)}}><Plus size={15}/> New workspace <span>⌘ K</span></button>
         <div className="side-label">WORKSPACE</div><div className="nav-item active"><Code2 size={15}/> Coding agent</div><div className="nav-item"><Layers3 size={15}/> Agent orchestration <span className="nav-count">04</span></div><div className="nav-item"><TerminalSquare size={15}/> Code workspace</div>
-        <div className="side-label history-label">RECENT SESSIONS</div>{history.map((item,i)=><button className="history-item" key={i} onClick={()=>setPrompt(item)}><FileCode2 size={13}/><span>{item}</span></button>)}
+        <div className="side-label history-label">RECENT SESSIONS</div>{history.map((item,i)=><button className="history-item" key={i} onClick={()=>{setPrompt(item);if(window.matchMedia("(max-width: 820px)").matches)setSidebar(false)}}><FileCode2 size={13}/><span>{item}</span></button>)}
         <div className="sidebar-bottom"><div className="plan-card"><Sparkles size={16} className="plan-icon"/><b>VORTEX orchestration</b><p>One request. Four specialist passes.</p><div className="plan-line"><span/></div><small>PLANNER · BUILDER · REVIEWER · SYNTHESIS</small></div><div className="profile"><div className="profile-avatar">V</div><div><b>VORTEX Workspace</b><small>Personal environment</small></div><ChevronDown size={14}/></div></div>
       </aside>
       <section className="main-panel">
