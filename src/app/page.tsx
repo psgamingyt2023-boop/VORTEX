@@ -95,7 +95,7 @@ export default function Home() {
       <div className="brand"><div className="brand-mark"><Layers3 size={17}/></div><span>VORTEX <b>AI</b></span><span className="brand-tag">UNIFIED CODING INTELLIGENCE</span></div>
       <div className="top-actions"><div className="system-pill"><span className={`pulse-dot ${status?.ready ? "" : "muted"}`}/>{status?.ready ? "GEMINI CONNECTED" : "ENGINE SETUP REQUIRED"}</div><button className="setup-button" onClick={() => window.open("https://aistudio.google.com/app/apikey","_blank")}>Connect Gemini <ArrowUpRight size={12}/></button><button className="avatar">V</button></div>
     </header>
-    <div className="workspace">
+    <div className={`workspace ${sidebar ? "sidebar-visible" : "sidebar-hidden"}`}>
       {sidebar && <aside className="sidebar">
         <button className="new-project" onClick={() => {setPrompt("");setResult(null);setCode(starter)}}><Plus size={15}/> New workspace <span>⌘ K</span></button>
         <div className="side-label">WORKSPACE</div><div className="nav-item active"><Code2 size={15}/> Coding agent</div><div className="nav-item"><Layers3 size={15}/> Agent orchestration <span className="nav-count">04</span></div><div className="nav-item"><TerminalSquare size={15}/> Code workspace</div>
