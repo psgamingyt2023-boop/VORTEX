@@ -54,3 +54,44 @@
 @keyframes workspace-enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:760px){.landing-nav{height:66px;padding:0 16px}.landing-nav .brand-tag,.landing-status{display:none}.landing-center{padding:45px 0 48px}.landing-center h1{font-size:clamp(43px,12vw,65px)}.hero-copy{font-size:12px}.landing-prompt-hints span:nth-child(2){display:none}.landing-footer{font-size:7px;letter-spacing:.06em;padding:15px}.workspace-mode .prompt-card{right:12px;bottom:12px;width:calc(100vw - 24px)}.workspace-mode .main-panel{padding-bottom:190px}.workspace-mode .sidebar{z-index:29}.launch-token{top:55%}.launch-caption{top:calc(55% + 73px)}}
 @media(prefers-reduced-motion:reduce){.ambient,.hero-orbit,.launch-token,.launch-flash,.launch-caption,.workspace-mode .prompt-card,.workspace-mode .welcome-row,.workspace-mode .result-heading,.workspace-mode .result-card,.workspace-mode .response-card{animation:none!important}}
+
+
+/* VORTEX // spectral workspace pass */
+.app-shell.workspace-mode{position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 74% 0%,rgba(107,78,210,.22),transparent 38%),radial-gradient(ellipse at 8% 80%,rgba(43,159,185,.11),transparent 32%),#080910}
+.app-shell.workspace-mode:before{content:"";position:fixed;inset:66px 0 0;z-index:-1;pointer-events:none;opacity:.22;background-image:linear-gradient(rgba(155,142,215,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(155,142,215,.09) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(ellipse at 60% 40%,#000,transparent 78%)}
+.app-shell.workspace-mode:after{content:"";position:fixed;width:560px;height:560px;right:-210px;top:110px;z-index:-1;pointer-events:none;border-radius:50%;background:conic-gradient(from 20deg,transparent,#8a6cff24,transparent,#62d8e824,transparent);filter:blur(65px);animation:vortex-halo 18s linear infinite}
+@keyframes vortex-halo{to{transform:rotate(360deg)}}
+.workspace-mode .topbar{background:rgba(8,9,16,.78);border-bottom-color:#7770a033;box-shadow:0 8px 35px #0003}
+.workspace-mode .brand-mark{position:relative;overflow:hidden;box-shadow:0 0 20px #987aff66,0 0 42px #6c56cb30,inset 0 1px 0 #ffffff55}
+.workspace-mode .brand-mark:after{content:"";position:absolute;inset:-70%;background:linear-gradient(110deg,transparent 38%,#ffffff75 49%,transparent 60%);transform:translateX(-70%) rotate(18deg);animation:mark-sheen 5s ease-in-out infinite}
+@keyframes mark-sheen{0%,60%{transform:translateX(-70%) rotate(18deg)}85%,100%{transform:translateX(70%) rotate(18deg)}}
+.workspace-mode .sidebar{background:linear-gradient(180deg,rgba(14,13,25,.98),rgba(8,10,17,.97));border-right-color:#8170bb2b;box-shadow:12px 0 55px #0002}
+.workspace-mode .nav-item,.workspace-mode .history-item,.workspace-mode .new-project{transition:background .22s,border-color .22s,transform .22s,color .22s}
+.workspace-mode .nav-item:hover,.workspace-mode .history-item:hover{transform:translateX(3px);background:#211d36;color:#e4ddff}
+.workspace-mode .nav-item.active{box-shadow:inset 2px 0 #b29aff,0 0 25px #9277ff13;background:linear-gradient(90deg,#282143,#171626)}
+.workspace-mode .main-panel{position:relative}
+.workspace-mode .welcome-row h1{ text-shadow:0 0 35px #9a80ff25}
+.workspace-mode .prompt-card,.workspace-mode .result-card,.workspace-mode .response-card{border-color:#7162a34a;box-shadow:0 14px 55px #0005,inset 0 1px 0 #ffffff09;transition:border-color .25s,box-shadow .25s,transform .25s}
+.workspace-mode .result-card:hover,.workspace-mode .response-card:hover{border-color:#9a82e066;box-shadow:0 18px 65px #0006,0 0 28px #8265e514}
+.workspace-mode .prompt-card{background:linear-gradient(135deg,rgba(26,22,43,.97),rgba(12,16,27,.96) 65%,rgba(14,24,33,.97));border-color:#a28bff70;box-shadow:0 20px 80px #000b,0 0 36px #9275ff24,inset 0 1px 0 #ffffff18}
+.workspace-mode .prompt-card:before{content:"";display:block;position:absolute;inset:0 0 auto;height:1px;background:linear-gradient(90deg,transparent,#b6a2ffb5,#77d9e8a0,transparent);opacity:.8;pointer-events:none}
+.workspace-mode .prompt-head{color:#c7b8ff}
+.workspace-mode .send-button{position:relative;overflow:hidden;box-shadow:0 4px 24px #8a72f566,0 0 0 1px #ffffff18 inset;transition:transform .2s,box-shadow .2s}
+.workspace-mode .send-button:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 8px 32px #8a72f588,0 0 24px #8a72f544}
+.workspace-mode .response-icon{box-shadow:0 0 24px #9478ff30}
+.workspace-mode .agent-card{background:linear-gradient(140deg,#19172a,#101722);border-color:#62568d55;transition:transform .2s,border-color .2s,box-shadow .2s}
+.workspace-mode .agent-card:hover{transform:translateY(-3px);border-color:#a28cff99;box-shadow:0 8px 24px #8064e522}
+.workspace-mode .mode-chip{box-shadow:0 0 24px #957aff18}
+.workspace-mode .prompt-card{z-index:40}
+@media(max-width:680px){
+  .workspace-mode .sidebar{z-index:29}
+  .workspace-mode .prompt-card{z-index:40;left:12px;right:12px;width:auto;bottom:12px}
+  .workspace-mode .main-panel{padding-bottom:205px}
+  .workspace-mode .prompt-footer{gap:8px}
+  .workspace-mode .prompt-tools{gap:8px}
+  .workspace-mode .prompt-tools span{font-size:8px}
+}
+@media(min-width:681px) and (max-width:900px){
+  .workspace-mode .prompt-card{right:16px;width:min(560px,calc(100vw - 250px))}
+}
+@media(prefers-reduced-motion:reduce){.app-shell.workspace-mode:after,.workspace-mode .brand-mark:after{animation:none!important}}
