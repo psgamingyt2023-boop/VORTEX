@@ -32,7 +32,7 @@ export default function Home() {
 
   useEffect(() => { fetch("/api/status").then(r => r.json()).then(setStatus).catch(() => setStatus(null)); }, []);
   const preview = useMemo(() => {
-    const escaped = code.replace(/<\\/script/gi, "<\\\\/script");
+    const escaped = code.replace(new RegExp("</script", "gi"), "<" + "\\/" + "script");
     return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><script src="https://unpkg.com/@babel/standalone/babel.min.js"><\\/script><style>*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui;background:#0b0d13;color:#f6f5fb}.demo-app{min-height:100vh;padding:48px;display:grid;align-content:center;justify-items:center;text-align:center}.demo-orb{width:90px;height:90px;border-radius:30px;background:linear-gradient(135deg,#a58cff,#63d5df);filter:blur(1px);box-shadow:0 0 80px #9875ff55;margin-bottom:28px;animation:float 5s ease-in-out infinite}@keyframes float{50%{transform:translateY(-12px) rotate(7deg)}}.demo-kicker{font-size:10px;letter-spacing:.2em;color:#b4a3ff}.demo-app h1{font-size:clamp(30px,6vw,56px);letter-spacing:-.05em;margin:16px 0}.demo-app p{color:#9298aa}</style></head><body><div id="root"></div><script src="https://unpkg.com/react@18/umd/react.development.js"><\\/script><script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"><\\/script><script type="text/babel">${escaped.replace(/export default function App/, "function App").replace(/export default App;?/, "")}\nReactDOM.createRoot(document.getElementById('root')).render(<App/>);<\\/script></body></html>`;
   }, [code]);
 
