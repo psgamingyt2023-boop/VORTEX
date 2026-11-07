@@ -119,13 +119,13 @@ export default function Home() {
       <div className="top-actions"><div className="system-pill"><span className={`pulse-dot ${status?.ready ? "" : "muted"}`}/>{status?.ready ? "GEMINI CONNECTED" : "ENGINE SETUP REQUIRED"}</div><button className="setup-button" onClick={() => window.open("https://aistudio.google.com/app/apikey","_blank")}>Connect Gemini <ArrowUpRight size={12}/></button><button className="avatar">V</button></div>
     </header>
     <div className={`workspace ${sidebar ? "sidebar-visible" : "sidebar-hidden"}`}>
-      {sidebar && <button className="sidebar-backdrop" aria-label="Close navigation" onClick={() => setSidebar(false)} />}
-      {sidebar && <aside id="vortex-sidebar" className="sidebar" aria-label="Workspace navigation">
+      <button className="sidebar-backdrop" aria-label="Close navigation" tabIndex={sidebar ? 0 : -1} aria-hidden={!sidebar} onClick={() => setSidebar(false)} />
+      <aside id="vortex-sidebar" className="sidebar" aria-label="Workspace navigation" aria-hidden={!sidebar}>
         <button className="new-project" onClick={() => {setPrompt("");setResult(null);setCode(starter)}}><Plus size={15}/> New workspace <span>⌘ K</span></button>
         <div className="side-label">WORKSPACE</div><div className="nav-item active"><Code2 size={15}/> Coding agent</div><div className="nav-item"><Layers3 size={15}/> Agent orchestration <span className="nav-count">04</span></div><div className="nav-item"><TerminalSquare size={15}/> Code workspace</div>
         <div className="side-label history-label">RECENT SESSIONS</div>{history.map((item,i)=><button className="history-item" key={i} onClick={()=>setPrompt(item)}><FileCode2 size={13}/><span>{item}</span></button>)}
         <div className="sidebar-bottom"><div className="plan-card"><Sparkles size={16} className="plan-icon"/><b>VORTEX orchestration</b><p>One request. Four specialist passes.</p><div className="plan-line"><span/></div><small>PLANNER · BUILDER · REVIEWER · SYNTHESIS</small></div><div className="profile"><div className="profile-avatar">V</div><div><b>VORTEX Workspace</b><small>Personal environment</small></div><ChevronDown size={14}/></div></div>
-      </aside>}
+      </aside>
       <section className="main-panel">
         <div className="welcome-row"><div><div className="eyebrow"><span/> ACCURACY-FIRST ENGINEERING</div><h1>Build something <em>extraordinary.</em></h1><p>Your coding workspace, powered by coordinated AI specialists.</p></div><div className="mode-chip"><WandSparkles size={13}/> Agent mode <ChevronDown size={12}/></div></div>
         <section className="prompt-card">
