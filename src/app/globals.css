@@ -243,3 +243,5 @@
   .landing-center>.landing-prompt-wrap,.landing-center>.idea-row,.landing-prompt:after,
   .launch-token,.launch-token .brand-mark,.launch-flash,.is-launching .landing-prompt{animation:none!important}
 }
+
+@media(min-width:821px){.workspace.sidebar-hidden .sidebar{display:none}}
